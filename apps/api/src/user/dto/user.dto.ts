@@ -1,6 +1,6 @@
 import { createSelectSchema } from 'drizzle-zod';
 import { createZodDto } from 'nestjs-zod';
-import { user } from 'src/database/database.schema';
+import { user } from '@workspace/database/schema';
 import z from 'zod';
 
 export const UserSchema = createSelectSchema(user, {

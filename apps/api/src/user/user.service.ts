@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { DrizzleService } from 'src/database/drizzle.service';
-import { user } from 'src/database/database.schema';
+import { DatabaseService } from 'src/database/database.service';
+import { user } from '@workspace/database/schema';
 import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class UserService {
-  constructor(private drizzleService: DrizzleService) {}
+  constructor(private drizzleService: DatabaseService) {}
 
   async findAll() {
     const users = await this.drizzleService.client.query.user.findMany();

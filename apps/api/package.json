@@ -20,11 +20,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "docker:build": "docker build -t docs-api .",
-    "docker:run": "docker run --env-file .env -p 3000:3000 docs-api",
-    "db:push": "drizzle-kit push",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "docker:run": "docker run --env-file .env -p 3000:3000 docs-api"
   },
   "dependencies": {
     "@itgorillaz/configify": "^4.0.1",
@@ -33,13 +29,13 @@
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/swagger": "^11.2.0",
+    "@workspace/database": "workspace:*",
     "better-auth": "^1.3.7",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "drizzle-orm": "^0.44.5",
     "drizzle-zod": "^0.8.3",
     "nestjs-zod": "^5.0.0",
-    "pg": "^8.16.3",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "zod": "^4.1.4"
@@ -53,9 +49,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.10.7",
-    "@types/pg": "^8.15.5",
     "@types/supertest": "^6.0.2",
-    "drizzle-kit": "^0.31.4",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.2",

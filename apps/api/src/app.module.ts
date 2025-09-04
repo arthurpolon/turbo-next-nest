@@ -8,9 +8,15 @@ import { AuthModule } from 'src/auth/auth.module';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { ZodExceptionFilter } from 'src/zod.exception';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
-  imports: [ConfigifyModule.forRootAsync(), AuthModule, UserModule],
+  imports: [
+    ConfigifyModule.forRootAsync(),
+    AuthModule,
+    UserModule,
+    DatabaseModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService,

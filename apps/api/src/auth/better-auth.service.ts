@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { betterAuth, BetterAuthOptions } from 'better-auth';
-import { DrizzleService } from 'src/database/drizzle.service';
+import { DatabaseService } from 'src/database/database.service';
 import {
   admin as adminPlugin,
   bearer,
@@ -11,7 +11,7 @@ import {
 import { ac, member, admin, owner } from 'src/auth/permissions';
 import { BETTER_AUTH_BASE_PATH, TRUSTED_ORIGINS } from 'src/auth/constants';
 
-const getBetterAuth = (drizzleService: DrizzleService) => {
+const getBetterAuth = (drizzleService: DatabaseService) => {
   const authConfig = {
     database: drizzleAdapter(drizzleService.client, {
       provider: 'pg',
@@ -50,7 +50,7 @@ const getBetterAuth = (drizzleService: DrizzleService) => {
 export class BetterAuthService {
   readonly client: ReturnType<typeof getBetterAuth>;
 
-  constructor(private drizzleService: DrizzleService) {
+  constructor(private drizzleService: DatabaseService) {
     this.client = getBetterAuth(this.drizzleService);
   }
 }
