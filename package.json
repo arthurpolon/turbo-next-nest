@@ -6,7 +6,12 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:check": "npm run --prefix packages/database db:check",
+    "db:generate": "npm run --prefix packages/database db:generate",
+    "db:migrate": "npm run --prefix packages/database db:migrate",
+    "db:push": "npm run --prefix packages/database db:push",
+    "db:studio": "npm run --prefix packages/database db:studio"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
