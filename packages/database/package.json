@@ -29,25 +29,18 @@
     "dev": "tsup --watch",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "typecheck": "tsc --noEmit",
-    "db:check": "drizzle-kit check",
-    "db:generate": "drizzle-kit generate",
-    "db:migrate": "drizzle-kit migrate",
-    "db:push": "drizzle-kit push",
-    "db:studio": "drizzle-kit studio"
+    "typecheck": "tsc --noEmit"
   },
   "peerDependencies": {
     "drizzle-orm": "^0.44.5"
   },
   "dependencies": {
-    "dotenv": "^17.2.2",
     "pg": "^8.16.3"
   },
   "devDependencies": {
     "@types/pg": "^8.11.12",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
-    "drizzle-kit": "^0.30.1",
     "tsup": "^8.3.5",
     "typescript": "^5.9.2"
   }

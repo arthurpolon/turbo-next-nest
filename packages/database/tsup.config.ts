@@ -11,5 +11,5 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  external: ["drizzle-orm", "pg", "dotenv"],
+  external: ["drizzle-orm", "pg"],
 });

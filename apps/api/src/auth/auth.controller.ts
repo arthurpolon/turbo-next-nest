@@ -1,6 +1,6 @@
 import { Controller, Get, Request } from '@nestjs/common';
 import { BetterAuthService } from './better-auth.service';
-import { fromNodeHeaders } from 'better-auth/node';
+import { fromNodeHeaders } from '@workspace/auth/node';
 import { Public, Session } from 'src/auth/auth.decorator';
 import type { UserSession } from 'src/auth/auth.guard';
 import type { Request as ExpressRequest } from 'express';

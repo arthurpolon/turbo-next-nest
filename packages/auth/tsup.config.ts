@@ -4,13 +4,13 @@ export default defineConfig({
   entry: {
     index: "src/index.ts",
     client: "src/client.ts",
+    node: "src/node.ts",
     types: "src/types.ts",
-    config: "src/config.ts",
   },
   format: ["cjs", "esm"],
   dts: true,
   splitting: false,
   sourcemap: true,
   clean: true,
-  external: ["drizzle-orm", "better-auth"],
+  external: ["better-auth"],
 });

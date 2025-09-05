@@ -1,8 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import type { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { APIError, type getSession } from 'better-auth/api';
-import { fromNodeHeaders } from 'better-auth/node';
+import { fromNodeHeaders } from '@workspace/auth/node';
+import { Session, User } from '@workspace/auth/types';
 import { Request } from 'express';
 import { BetterAuthService } from 'src/auth/better-auth.service';
 
@@ -10,9 +10,10 @@ import { BetterAuthService } from 'src/auth/better-auth.service';
  * Type representing a valid user session after authentication
  * Excludes null and undefined values from the session return type
  */
-export type UserSession = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof getSession>>>
->;
+export type UserSession = {
+  session: Session;
+  user: User;
+};
 
 /**
  * NestJS guard that handles authentication for protected routes
@@ -62,11 +63,7 @@ export class AuthGuard implements CanActivate {
 
     if (isOptional && !session) return true;
 
-    if (!session)
-      throw new APIError(401, {
-        code: 'UNAUTHORIZED',
-        message: 'Unauthorized',
-      });
+    if (!session) throw new UnauthorizedException('Authentication required');
 
     return true;
   }

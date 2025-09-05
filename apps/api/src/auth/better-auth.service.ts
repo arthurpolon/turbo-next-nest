@@ -1,56 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { betterAuth, BetterAuthOptions } from 'better-auth';
+
+import { createAuth } from '@workspace/auth';
+import { AppConfig } from 'src/config/app.config';
+import { BetterAuthConfig } from 'src/config/better-auth.config';
 import { DatabaseService } from 'src/database/database.service';
-import {
-  admin as adminPlugin,
-  bearer,
-  openAPI,
-  organization,
-} from 'better-auth/plugins';
-import { ac, member, admin, owner } from 'src/auth/permissions';
-import { BETTER_AUTH_BASE_PATH, TRUSTED_ORIGINS } from 'src/auth/constants';
 
-const getBetterAuth = (drizzleService: DatabaseService) => {
-  const authConfig = {
-    database: drizzleAdapter(drizzleService.client, {
-      provider: 'pg',
-    }),
-
-    basePath: BETTER_AUTH_BASE_PATH,
-
-    emailAndPassword: {
-      enabled: true,
-    },
-    telemetry: {
-      enabled: false,
-    },
-    trustedOrigins: TRUSTED_ORIGINS,
-    plugins: [
-      bearer(),
-      openAPI(),
-      adminPlugin(),
-      organization({
-        ac,
-        roles: {
-          member,
-          admin,
-          owner,
-        },
-      }),
-    ],
-  } satisfies BetterAuthOptions;
-
-  return betterAuth(authConfig) as ReturnType<
-    typeof betterAuth<typeof authConfig>
-  >;
-};
+type TAuth = ReturnType<typeof createAuth>;
 
 @Injectable()
 export class BetterAuthService {
-  readonly client: ReturnType<typeof getBetterAuth>;
+  client: TAuth;
 
-  constructor(private drizzleService: DatabaseService) {
-    this.client = getBetterAuth(this.drizzleService);
+  constructor(
+    private dbService: DatabaseService,
+    private betterAuthConfig: BetterAuthConfig,
+    private appConfig: AppConfig,
+  ) {
+    this.client = createAuth({
+      drizzleInstance: this.dbService.client,
+      basePath: this.betterAuthConfig.basePath,
+      baseURL: this.betterAuthConfig.baseUrl,
+      secret: this.betterAuthConfig.secret,
+
+      trustedOrigins: this.appConfig.trustedOrigins,
+    });
   }
 }

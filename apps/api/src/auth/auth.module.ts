@@ -2,28 +2,31 @@ import { Logger, Module, NestModule } from '@nestjs/common';
 import { BetterAuthService } from './better-auth.service';
 import { AuthController } from './auth.controller';
 import { HttpAdapterHost } from '@nestjs/core';
-import { toNodeHandler } from 'better-auth/node';
-import { DatabaseModule } from 'src/database/database.module';
-import { BETTER_AUTH_BASE_PATH, TRUSTED_ORIGINS } from 'src/auth/constants';
+import { toNodeHandler } from '@workspace/auth/node';
 import type { Express } from 'express';
 import { json as jsonParser } from 'express';
+import { DatabaseModule } from 'src/database/database.module';
+import { AppConfig } from 'src/config/app.config';
+import { BetterAuthConfig } from 'src/config/better-auth.config';
 
 @Module({
-  imports: [DatabaseModule],
   providers: [BetterAuthService],
   controllers: [AuthController],
   exports: [BetterAuthService],
+  imports: [DatabaseModule],
 })
 export class AuthModule implements NestModule {
   private readonly logger = new Logger(AuthModule.name);
   constructor(
     private readonly adapter: HttpAdapterHost,
     private readonly betterAuthService: BetterAuthService,
+    private appConfig: AppConfig,
+    private betterAuthConfig: BetterAuthConfig,
   ) {}
 
   configure(): void {
     this.adapter.httpAdapter.enableCors({
-      origin: TRUSTED_ORIGINS,
+      origin: this.appConfig.trustedOrigins,
       methods: ['GET', 'PATCH', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
       allowedHeaders: [
         'Content-Type',
@@ -37,7 +40,7 @@ export class AuthModule implements NestModule {
     const handler = toNodeHandler(this.betterAuthService.client);
     const instance: Express = this.adapter.httpAdapter.getInstance();
 
-    instance.use(`${BETTER_AUTH_BASE_PATH}/*path`, (req, res) => {
+    instance.use(`${this.betterAuthConfig.basePath}/*path`, (req, res) => {
       return handler(req, res);
     });
 
@@ -45,7 +48,7 @@ export class AuthModule implements NestModule {
     instance.use(jsonParser());
 
     this.logger.log(
-      `AuthModule initialized BetterAuth on '${BETTER_AUTH_BASE_PATH}/*'`,
+      `AuthModule initialized BetterAuth on '${this.betterAuthConfig.basePath}/*'`,
     );
   }
 }
